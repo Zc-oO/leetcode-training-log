@@ -1,4 +1,4 @@
-# Algorithm Training Camp - Day 1
+# Algorithm Training Camp - Day 7
 
 ## Today's Problems
 
@@ -32,19 +32,17 @@
 **Code Logic:**
 
 ```python
-record = [0] * 26
-
-for i in s:
-    record[ord(i) - ord("a")] += 1
-
-for i in t:
-    record[ord(i) - ord("a")] -= 1
-
-for i in range(26):
-    if record[i] != 0:
-        return False
-
-return True
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        record = [0] * 26
+        for i in s:
+            record[ord(i) - ord("a")] += 1
+        for i in t:
+            record[ord(i) - ord("a")] -= 1
+        for i in range(26):
+            if record[i] != 0:
+                return False
+        return True
 ```
 
 ---
@@ -62,18 +60,17 @@ Given two integer arrays `nums1` and `nums2`, return their intersection. Each el
 **Code Logic (using dict + set):**
 
 ```python
-store = {}
-
-for num in nums1:
-    store[num] = store.get(num, 0) + 1
-
-res = set()
-
-for num in nums2:
-    if num in store:
-        res.add(num)
-
-return list(res)
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        store = {}
+        for num in nums1:
+            store[num] = store.get(num, 0) + 1
+        res = set()
+        for num in nums2:
+            if num in store:
+                res.add(num)
+                del store[num]
+        return list(res)
 ```
 
 ---
@@ -95,22 +92,20 @@ A happy number is a number defined by the following process:
 **Code Logic:**
 
 ```python
-exist = set()
-
-while n not in exist:
-    exist.add(n)
-    new_num = 0
-    n_str = str(n)
-
-    for i in n_str:
-        new_num += int(i) ** 2
-
-    if new_num == 1:
-        return True
-    else:
-        n = new_num
-
-return False
+class Solution:
+    def isHappy(self, n: int) -> bool:
+        exist = set()
+        while n not in exist:
+            exist.add(n)
+            new_num = 0
+            n_str = str(n)
+            for i in n_str:
+                new_num += int(i)**2
+            if new_num == 1:
+                return True
+            else:
+                n = new_num
+        return False
 ```
 
 ---
@@ -129,14 +124,18 @@ You may assume that each input would have exactly one solution, and you may not 
 **Code Logic:**
 
 ```python
-records = dict()
-
-for idx, val in enumerate(nums):
-    if target - val in records:
-        return [records[target - val], idx]
-    records[val] = idx
-
-return []
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        records = dict()
+        # enumerate gives you both the val and idx at the same time
+        for idx, val in enumerate(nums):
+            if target - val in records:
+                return [records[target - val], idx]
+            # val as the key and idx as the value, it forms a key-value pair
+            # we need to use val as the key 
+            # since we want to check whether certain val is in records
+            records[val] = idx
+        return []
 ```
 
 
