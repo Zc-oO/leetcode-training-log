@@ -1,4 +1,4 @@
-# Algorithm Training Camp - Day 7
+# Algorithm Training Camp - Day 6
 
 ## Today's Problems
 
