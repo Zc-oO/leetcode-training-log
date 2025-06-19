@@ -137,3 +137,78 @@ class Solution:
 ```
 
 ---
+
+---
+
+## 4️⃣ 18. 4Sum
+
+**Question:**  
+Given an array `nums` of n integers, return an array of all the unique quadruplets `[nums[a], nums[b], nums[c], nums[d]]` such that:
+```python
+nums[a] + nums[b] + nums[c] + nums[d] == target
+```
+Each of a, b, c, and d must be distinct.
+Input: nums = [1, 0, -1, 0, -2, 2], target = 0  
+Output: [[-2, -1, 1, 2], [-2, 0, 0, 2], [-1, 0, 0, 1]]
+
+**My idea:**
+- 4Sum is very similar to 3Sum.
+- The only difference is we add one more outer loop to fix a second number.
+- After sorting the array, we:
+- Use a double loop to fix the first two numbers
+- Then apply two-pointer logic to find the rest
+- Use the same duplicate skipping technique as in 3Sum to avoid repeated results.
+- Note on pruning (剪枝):
+- We can add pruning to break early when:
+```python
+if nums[i] > target and nums[i] > 0 and target > 0:
+    break
+```
+- Also:
+```python
+if nums[i] + nums[j] > target and target > 0:
+    break
+```
+- BUT this only works when both nums and target are positive.
+- If the list has both negative and positive numbers, premature pruning may skip valid results.
+
+**Code Logic:**
+
+```python
+class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        result = []
+        nums.sort()
+        for i in range(len(nums)):
+            # break only when the both nums are positive and the target is also positive
+            # otherwise it might try to break too early without considering 
+            # the full combination of negative and positive values.
+            if nums[i] > target and nums[i] > 0 and target > 0:# 剪枝（可省）
+                break
+            if i > 0 and nums[i] == nums[i-1]:
+                continue
+            # the second for loop is just the same as the 3Sum
+            for j in range(i+1, len(nums), 1):
+                # break only when the both nums are positive and the target is also positive
+                if nums[i] + nums[j] > target and target > 0: #剪枝（可省）
+                    break
+                if j > i+1 and nums[j] == nums[j-1]:
+                    continue
+                left = j + 1
+                right = len(nums) - 1
+                while left < right:
+                    sum_ = nums[i] + nums[j] + nums[left] + nums[right]
+                    if sum_ < target:
+                        left += 1
+                    elif sum_ > target:
+                        right -= 1
+                    else:
+                        result.append([nums[i], nums[j], nums[left], nums[right]])
+                        while left < right and nums[left] == nums[left+1]:
+                            left += 1
+                        while left < right and nums[right] == nums[right-1]:
+                            right -= 1
+                        left += 1
+                        right -= 1
+        return result
+```
